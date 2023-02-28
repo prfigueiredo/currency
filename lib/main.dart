@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'app/home_page.dart';
-
+//When you create a API key in hgbrasil.com, you should use it URL as I did on the line below
 var request = Uri.parse("https://api.hgbrasil.com/finance?key=YOUR-KEY-SHOULD-BE-HERE");
 
 void main() async {
