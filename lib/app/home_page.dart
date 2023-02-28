@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 //You should create a key file("key.dart") apart that contains the URL requested(http request)
-// In this code I call it as "request"(Line 50).
+// In this code I call it as "request".
 import 'key.dart';
 
 class Home extends StatefulWidget {
