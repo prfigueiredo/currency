@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'app/home_page.dart';
 
-var request = Uri.parse("https://api.hgbrasil.com/finance?key=f9d6ae28");
+var request = Uri.parse("https://api.hgbrasil.com/finance?key=YOUR-KEY-SHOULD-BE-HERE");
 
 void main() async {
 
