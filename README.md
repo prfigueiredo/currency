@@ -1,16 +1,7 @@
-# conv
+# Currency converter
 
-A new Flutter project.
+A Currency converter(BRL, USD, EUR) app built in Flutter.
+You can see the app working by watching the YouTube video below:
 
-## Getting Started
+[![Alt text](https://img.youtube.com/vi/kGSiA520ahM/0.jpg)](https://www.youtube.com/watch?v=kGSiA520ahM)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
