@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-//You should create a key file("model_page.dart") apart that contains the URL requested(http request)
-var request = Uri.parse("https://api.hgbrasil.com/finance?key=f9d6ae28");
+//You should create a KEY on the HG Brasil Finance API that contains the URL requested(http request)!
+var request = Uri.parse("https://api.hgbrasil.com/finance?key=YOUR-API-KEY");
 
 //Model (MVP pattern)
 class Model{
@@ -11,6 +11,3 @@ Future<Map> getData() async {
   return jsonDecode(response.body);
 }
 }
-// print(await getData());
-//
-// }
