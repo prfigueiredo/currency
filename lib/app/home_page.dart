@@ -1,12 +1,8 @@
+import 'package:conv/app/Model/model_page.dart';
+import 'package:conv/app/Presenter/presenter_page.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 
-//You should create a key file("key.dart") apart that contains the URL requested(http request)
-// In this code I call it as "request"(Line 50).
-import 'key.dart';
-
+//View (MVP pattern)
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -15,40 +11,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // input user text controllers
-  final reaisController = TextEditingController();
-  final dolaresController = TextEditingController();
-  final eurosController = TextEditingController();
-
-  late double dolares;
-  late double euros;
-  late double reais;
-
-  //It's a function that calculates quotation, using the text typed by user.
-  void _reaisChanged(String text){
-    double reais = double.parse(text);
-    dolaresController.text = (reais/dolares).toStringAsFixed(2);
-    eurosController.text = (reais/euros).toStringAsFixed(2);
-  }
-  //It's a function that calculates quotation, using the text typed by user.
-  void _dolaresChanged(String text){
-    double dolares = double.parse(text);
-    reaisController.text = (dolares * this.dolares).toStringAsFixed(2);
-    eurosController.text = (dolares * euros/euros).toStringAsFixed(2);
-  }
-  // It's a function that calculates quotation, using the text typed by user.
-  void _eurosChanged(String text){
-    double euros = double.parse(text);
-    reaisController.text = (euros * this.euros).toStringAsFixed(2);
-    dolaresController.text = (euros * this.euros/dolares).toStringAsFixed(2);
-  }
-
-  // It's a function that returns JSON data
-  Future<Map> getData() async {
-    http.Response response = await http.get(request);
-    return jsonDecode(response.body);
-  }
-
+  //Instancing Model class (MVP pattern)
+  Model textData = Model();
+  //Instancing Presenter class (MVP pattern)
+  Presenter controller = Presenter();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,26 +23,32 @@ class _HomeState extends State<Home> {
         title: const Text("Currency Converter"),
         backgroundColor: Colors.green,
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () => setState(() {
+                    controller.resetButton();
+                  }),
+              icon: const Icon(Icons.refresh)),
+        ],
       ),
       body: FutureBuilder<Map>(
-        future: getData(),
-        builder: (context, snapshot) {
-            switch(snapshot.connectionState){
+          future: textData.getData(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
-                return Center(
+                return const Center(
                   child: Text(
-                    "Carregando...",
+                    "Loading...",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 25.0,
                     ),
                   ),
-
                 );
               default:
-                if(snapshot.hasError){
-                  return Center(
+                if (snapshot.hasError) {
+                  return const Center(
                     child: Text(
                       "Ocorreu um erro no carregamento dos dados",
                       style: TextStyle(
@@ -85,55 +57,61 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   );
-                }else{
-
-                  dolares = snapshot.data!["results"]["currencies"]["USD"]["buy"];
-                  euros = snapshot.data!["results"]["currencies"]["EUR"]["buy"];
-
+                } else {
+                  controller.dolares =
+                      snapshot.data!["results"]["currencies"]["USD"]["buy"];
+                  controller.euros =
+                      snapshot.data!["results"]["currencies"]["EUR"]["buy"];
 
                   return SingleChildScrollView(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Icon(
-                            Icons.monetization_on,
-                            size: 150.0,
-                            color: Colors.green,
+                        const Icon(
+                          Icons.monetization_on,
+                          size: 150.0,
+                          color: Colors.green,
                         ),
-                        buildTextField("BRL", "R\$ ", reaisController, _reaisChanged),
-                        Divider(),
-                        buildTextField("USD", "US\$ ", dolaresController, _dolaresChanged),
-                        Divider(),
-                        buildTextField("EUR", "€ ", eurosController, _eurosChanged),
+                        buildTextField(
+                            "BRL",
+                            "R\$ ",
+                            controller.reaisController,
+                            controller.reaisChanged),
+                        const Divider(),
+                        buildTextField(
+                            "USD",
+                            "US\$ ",
+                            controller.dolaresController,
+                            controller.dolaresChanged),
+                        const Divider(),
+                        buildTextField("EUR", "€ ", controller.eurosController,
+                            controller.eurosChanged),
                       ],
                     ),
                   );
                 }
             }
-        }
-      ),
+          }),
     );
   }
 }
 
-Widget buildTextField(String label, String prefix, TextEditingController controller,final function){
-
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.grey),
-        border: OutlineInputBorder(),
-        prefixText: prefix,
-      ),
-      style: TextStyle(
-        color: Colors.grey,
-        fontSize: 25.0,
-      ),
-      onChanged: function,
-      keyboardType: TextInputType.number,
-    );
-
-
+Widget buildTextField(String label, String prefix,
+    TextEditingController controller, final function) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.grey),
+      border: const OutlineInputBorder(),
+      prefixText: prefix,
+    ),
+    style: const TextStyle(
+      color: Colors.grey,
+      fontSize: 25.0,
+    ),
+    onChanged: function,
+    keyboardType: TextInputType.number,
+  );
 }

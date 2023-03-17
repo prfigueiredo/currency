@@ -1,1 +1,0 @@
-var request = Uri.parse("https://api.hgbrasil.com/finance?key=f9d6ae28");
